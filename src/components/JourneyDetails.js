@@ -13,11 +13,12 @@ import {
   FlatList,
 } from "react-native";
 
-export default function JourneyDetails({ navigation }) {
+export default function JourneyDetails({ navigation,props }) {
   console.log("bus no: ", busno);
   console.log("from: ", from);
   console.log("to: ", to);
   const [busData, setBusData] = useState([]);
+  //const [busId,setBusId]= useState(null);
   
  
   const onPress = async () => {
@@ -25,25 +26,25 @@ export default function JourneyDetails({ navigation }) {
     try {
       global.status = "active";
     
-      await firebase.db.collection("busData").add({
-        
+      const bus = await firebase.db.collection("busData").add({
+    
         busNumber: busno,
         departure: from,
         destination:to, 
         busStatus : status
       });
-
-      navigation.navigate("JourneyDetail",{
-        userId: id,
-      });
+console.log(bus.id);
+//setBusId(bus.id);
+//console.log(busId);
+      navigation.navigate("JourneyDetail",bus.id
+      );
     } catch (error) {
       console.log(error)
     }
 
  
   };
-  const [users, setUsers] = useState([]);
-
+  
   
   useEffect(() => {
    

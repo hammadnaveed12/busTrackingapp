@@ -10,32 +10,54 @@ import {
   TextInput,
   Button,
   TouchableOpacity,
+  Alert,
   SafeAreaView,
   FlatList
 } from "react-native";
 import RadioButton from "./RadioButton";
 
-export default function JourneyDetails ({navigation,props}) {
+export default function JourneyDetails (props,{navigation}) {
+  
     console.log("bus no: ",busno);
     console.log("from: ",from);
     console.log("to: ",to);
     console.log("status: ",status);
-    const [value,setValue]=useState();
     
+    console.log("id: ",props.route.params);
+    const [value,setValue]=useState();
+
+    const deleteUser = async () => {
+      
+      const dbRef = firebase.db
+        .collection("busData")
+        .doc(props.route.params);
+      await dbRef.delete();
+      
+      props.navigation.navigate("Home");
+    };
     
     
     const noService = async() => {
 
         global.status="not in service"
         setValue("Not in Service")
-        firebase.db.collection("busData").doc("").update({
+        firebase.db.collection("busData").doc(props.route.params).update({
           busStatus: "not in service"
       });
         
     };
     const end =  () => {
-        navigation.navigate("Home")
-        global.status="active"
+      Alert.alert(
+        "Ending the Journey",
+        "Are you sure?",
+        [
+          { text: "Yes", onPress: () => deleteUser() },
+          { text: "No", onPress: () => console.log("canceled") },
+        ],
+        {
+          cancelable: true,
+        }
+      );
     };
     
 
@@ -47,6 +69,7 @@ export default function JourneyDetails ({navigation,props}) {
   },[])
     return (
 <View>
+ 
 <Text style={styles.text}>Bus no : {busno}</Text>
 
 <Text style={styles.text}>{from} to {to}</Text>
