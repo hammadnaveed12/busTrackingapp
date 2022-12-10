@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
-
+import firebase from "../database/firebase";
 import {
   StyleSheet,
   Text,
@@ -17,16 +17,38 @@ export default function JourneyDetails({ navigation }) {
   console.log("bus no: ", busno);
   console.log("from: ", from);
   console.log("to: ", to);
+  const [busData, setBusData] = useState([]);
+  
+ 
+  const onPress = async () => {
+    
+    try {
+      global.status = "active";
+    
+      await firebase.db.collection("busData").add({
+        
+        busNumber: busno,
+        departure: from,
+        destination:to, 
+        busStatus : status
+      });
 
-  const onPress = () => {
-    global.status = "active";
-    navigation.navigate("JourneyDetail");
+      navigation.navigate("JourneyDetail",{
+        userId: id,
+      });
+    } catch (error) {
+      console.log(error)
+    }
+
+ 
   };
-  const [option, setOption] = useState(null);
-  const data = [
-    { value: "Sheffield Interchange to Medowhall" },
-    { value: "Medowhall to Sheffield Interchange" },
-  ];
+  const [users, setUsers] = useState([]);
+
+  
+  useEffect(() => {
+   
+  }, []);
+ 
   return (
     <View style={{ flex: 1 }}>
       <View style={{ flex: 0.2 }}>

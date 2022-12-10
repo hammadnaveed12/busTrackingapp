@@ -1,7 +1,7 @@
 
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
-
+import firebase from "../database/firebase";
 import {
   StyleSheet,
   Text,
@@ -15,32 +15,35 @@ import {
 } from "react-native";
 import RadioButton from "./RadioButton";
 
-export default function JourneyDetails({navigation}) {
+export default function JourneyDetails ({navigation,props}) {
     console.log("bus no: ",busno);
     console.log("from: ",from);
     console.log("to: ",to);
     console.log("status: ",status);
     const [value,setValue]=useState();
     
-    const noService = () => {
+    
+    
+    const noService = async() => {
 
-        global.status="inactive"
+        global.status="not in service"
         setValue("Not in Service")
+        firebase.db.collection("busData").doc("").update({
+          busStatus: "not in service"
+      });
         
     };
     const end =  () => {
         navigation.navigate("Home")
         global.status="active"
     };
-    const [option, setOption] = useState(null);
-  const data = [
-    { value: 'Sheffield Interchange to Medowhall' },
-    { value: 'Medowhall to Sheffield Interchange' },
     
-  ];
 
   useEffect(()=>{
     setValue("Journey Active")
+    
+      
+    
   },[])
     return (
 <View>
