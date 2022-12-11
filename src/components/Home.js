@@ -14,7 +14,7 @@ import {
 } from "react-native";
 
 export default function Home({ navigation }) {
-  const [text, onChangeText] = React.useState();
+  const [text, onChangeText] = React.useState("");
   const onPress = () => {
     global.busno = text;
     navigation.navigate("Journey");
@@ -36,7 +36,7 @@ export default function Home({ navigation }) {
       />
 
       {text == "" ? (
-        <Text></Text>
+        <Text> </Text>
       ) : (
         <TouchableOpacity style={styles.button} onPress={onPress}>
           <Text style={{ color: "white" }}>Submit</Text>
